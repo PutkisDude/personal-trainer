@@ -1,10 +1,15 @@
 import './App.css';
-import CustomerList from './CustomerList';
+import React from 'react';
+import AppBarNavi from './AppBarNavi';
+
 
 function App() {
+
+
   return (
     <div>
-      <CustomerList />
+      <AppBarNavi />
+    {/*  <CustomerList /> */}
     </div>
   );
 }

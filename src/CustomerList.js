@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {AgGridReact} from 'ag-grid-react';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham-dark.css';
+import 'ag-grid-community/dist/styles/ag-theme-alpine-dark.css';
 
 function CustomerList() {
 
@@ -32,8 +32,9 @@ function CustomerList() {
     return(
         <div>
 
-            <div className="ag-theme-balham-dark" style={{height:600, margin:'auto'}}>
+            <div className="ag-theme-alpine-dark" style={{height:800, width:'100%'}}>
                 <AgGridReact 
+                style={{width:'100%', height:500}}
                 rowData={customers}
                 columnDefs={columns}
                 pagination={true}
