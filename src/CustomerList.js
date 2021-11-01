@@ -20,28 +20,25 @@ function CustomerList() {
     }
 
     const columns = [
-        {field: 'firstname', sortable:true, filter:true},
-        {field: 'lastname', sortable:true, filter:true},
-        {field: 'phone', sortable:false},
+        {headerName: 'First name', field: 'firstname', sortable:true, filter:true, width:150},
+        {headerName: 'Last name', field: 'lastname', sortable:true, filter:true, width: 150},
+        {field: 'phone', sortable:false, width:160},
         {field: 'email', sortable:false},
-        {field: 'city', sortable: true, filter:true},
-        {field: 'streetaddress', sortable: false},
-        {field: 'postcode', sortable: false}
+        {headerName: 'Address', children: [
+            {field: 'city', sortable:true},
+            {headerName:'Street Address', field: 'streetaddress'},
+            {field: 'postcode', sortable:true}] }
     ]
 
     return(
-        <div>
-
-            <div className="ag-theme-alpine-dark" style={{height:800, width:'100%'}}>
+            <div className="ag-theme-alpine-dark" style={{height:600, width:'100%'}}>
                 <AgGridReact 
-                style={{width:'100%', height:500}}
+                defaultColdDef={{sortable:true, filter:true}}
                 rowData={customers}
                 columnDefs={columns}
                 pagination={true}
                 />
             </div>
-
-        </div>
     )
 
 }

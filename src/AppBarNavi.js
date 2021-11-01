@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import {CssBaseline, IconButton, List, ListItem, ListItemIcon, ListItemText, Toolbar } from '@mui/material';
+import {CssBaseline, IconButton, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import CustomerList from './CustomerList';
 
@@ -20,6 +21,8 @@ const openedMixin = (theme) => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: 'hidden',
+  background:'black',
+  color: 'white'
 });
 
 const closedMixin = (theme) => ({
@@ -28,6 +31,7 @@ const closedMixin = (theme) => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: 'hidden',
+  background: '#000000',
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(9)} + 1px)`,
@@ -36,6 +40,7 @@ const closedMixin = (theme) => ({
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
+  background: 'black',
   alignItems: 'center',
   justifyContent: 'flex-end',
   padding: theme.spacing(0, 1),
@@ -53,6 +58,7 @@ const AppBar = styled(MuiAppBar, {
   }),
   ...(open && {
     marginLeft: drawerWidth,
+    background: 'black',
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -84,8 +90,9 @@ function AppBarNavi() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [links] = useState([
-    {text: 'Customers', icon: <AccountBoxIcon />},
-    {text: 'Schedule', icon: <ScheduleIcon />}
+    {text: 'Customers', icon: <AccountBoxIcon sx={{color:'white'}} />},
+    {text: 'Schedule', icon: <ScheduleIcon sx={{color:'white'}} />},
+    {text: 'Trainings', icon: <DirectionsRunIcon sx={{color:'white'}} />}
   ])
 
   const handleDrawerOpen = () => {
@@ -99,7 +106,7 @@ function AppBarNavi() {
   return (
     <Box sx={{display:'flex'}}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" open={open} sx={{bgcolor:'#c05050'}}>
         <Toolbar>
           <IconButton
           color="inherit"
@@ -113,6 +120,9 @@ function AppBarNavi() {
           >          
           <MenuIcon />
           </IconButton>
+          <Typography variant="h6" noWrap component="div">
+            Total Gym 2021
+          </Typography>
         </Toolbar>
         
       </AppBar>
@@ -120,7 +130,7 @@ function AppBarNavi() {
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            {theme.direction === 'rtl' ? <ChevronRightIcon sx={{color:'white'}} /> : <ChevronLeftIcon sx={{color:'white'}} />}
           </IconButton>
         </DrawerHeader>
 
@@ -136,7 +146,9 @@ function AppBarNavi() {
         </List>
       </Drawer>
       <Box component="main" sx={{flexGrow: 1, paddingTop:8}}>
-        <CustomerList />
+        <div style={{height:'100%', width:'100%'}}>
+         <CustomerList />
+        </div>
 
       </Box>
     </Box>
