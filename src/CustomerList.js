@@ -20,14 +20,19 @@ function CustomerList() {
     }
 
     const columns = [
-        {headerName: 'First name', field: 'firstname', sortable:true, filter:true, width:150},
-        {headerName: 'Last name', field: 'lastname', sortable:true, filter:true, width: 150},
-        {field: 'phone', sortable:false, width:160},
-        {field: 'email', sortable:false},
+        {headerName: 'Person information', children: [
+            {headerName: 'First name', field: 'firstname', sortable:true, filter:true, width:150},
+            {headerName: 'Last name', field: 'lastname', sortable:true, filter:true, width: 150},
+        ]},
+        {headerName: 'Contact', children: [
+            {field: 'email', sortable:false},
+            {field: 'phone', sortable:false, width:160, columnGroupShow: 'open'}
+        ]
+        },
         {headerName: 'Address', children: [
-            {field: 'city', sortable:true},
-            {headerName:'Street Address', field: 'streetaddress'},
-            {field: 'postcode', sortable:true}] }
+            {field: 'city', sortable:true, width:120, columnGroupShow: 'close'},
+            {headerName:'Street Address', field: 'streetaddress', columnGroupShow: 'open'},
+            {field: 'postcode', sortable:true, columnGroupShow: 'open'}] }
     ]
 
     return(
