@@ -43,8 +43,8 @@ function CustomerList() {
     ]
 
     return(
-            <div className="ag-theme-alpine-dark" style={{height:600, width:'100%'}}>
-                <AgGridReact 
+            <div className="ag-theme-alpine-dark fullheight">
+                <AgGridReact
                 rowData={customers}
                 columnDefs={columns}
                 defaultColDef={defaultCol}

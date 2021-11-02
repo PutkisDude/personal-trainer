@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import {  styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import {CssBaseline, IconButton, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -11,6 +11,8 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import CustomerList from './CustomerList';
+import './App.css';
+
 
 const drawerWidth = 180;
 
@@ -104,7 +106,7 @@ function AppBarNavi() {
   };
 
   return (
-    <Box sx={{display:'flex'}}>
+    <Box sx={{display:'flex', height:'100%'}}>
       <CssBaseline />
       <AppBar position="fixed" open={open} sx={{bgcolor:'#c05050'}}>
         <Toolbar>
@@ -124,7 +126,7 @@ function AppBarNavi() {
             Total Gym 2021
           </Typography>
         </Toolbar>
-        
+   
       </AppBar>
 
       <Drawer variant="permanent" open={open}>
@@ -146,7 +148,7 @@ function AppBarNavi() {
         </List>
       </Drawer>
       <Box component="main" sx={{flexGrow: 1, paddingTop:8}}>
-        <div style={{height:'100%', width:'100%'}}>
+        <div style={{height:'100%'}}>
          <CustomerList />
         </div>
 
