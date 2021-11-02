@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
-import { styled, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import {CssBaseline, IconButton, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar from '@mui/material/AppBar';
+import React from "react";
+import { useState } from "react";
+import {  styled, useTheme } from '@mui/material/styles';
+import {BrowserRouter as Router,Switch,Route} from "react-router-dom";
+import {Link, List, ListItem, ListItemIcon, ListItemText, IconButton} from '@mui/material'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 import ScheduleIcon from '@mui/icons-material/Schedule';
-import CustomerList from './CustomerList';
+import { Box } from "@mui/system";
+import MuiDrawer from '@mui/material/Drawer';
+import MuiAppBar from '@mui/material/AppBar';
+import Customerlist from './CustomerList.js';
 
 const drawerWidth = 180;
 
@@ -84,76 +85,56 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-
-function AppBarNavi() {
-
-  const theme = useTheme();
-  const [open, setOpen] = useState(false);
-  const [links] = useState([
-    {text: 'Customers', icon: <AccountBoxIcon sx={{color:'white'}} />},
-    {text: 'Schedule', icon: <ScheduleIcon sx={{color:'white'}} />},
-    {text: 'Trainings', icon: <DirectionsRunIcon sx={{color:'white'}} />}
-  ])
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+function RouterLinks() {
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const [open, setOpen] = useState(false);
 
-  return (
-    <Box className="fullheight" sx={{display:'flex'}}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{bgcolor:'#c05050'}}>
-        <Toolbar>
-          <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          edge="start"
-          sx={{
-            marginRight: '36px',
-            ...(open && { display: 'none' })
-          }}
-          >          
-          <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Total Gym 2021
-          </Typography>
-        </Toolbar>
-   
-      </AppBar>
+  const theme = useTheme();
 
+
+  const [links] = useState([
+    {text: 'Customers', icon: <AccountBoxIcon sx={{color:'white'}} />, link: '/'},
+    {text: 'Schedule', icon: <ScheduleIcon sx={{color:'white'}} />, link: '#'},
+    {text: 'Trainings', icon: <DirectionsRunIcon sx={{color:'white'}} />, link:'#'}
+  ])
+
+    return(
+      <div>
+        <Router>
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon sx={{color:'white'}} /> : <ChevronLeftIcon sx={{color:'white'}} />}
-          </IconButton>
-        </DrawerHeader>
-
+      <DrawerHeader>
+        <IconButton onClick={handleDrawerClose}>
+          {theme.direction === 'rtl' ? <ChevronRightIcon sx={{color:'white'}} /> : <ChevronLeftIcon sx={{color:'white'}} />}
+        </IconButton>
+      </DrawerHeader>
+            <Switch>
+    <Route exact path="/" component={<Customerlist />} />
+    <Route path="/schedule" />
+    <Route path="/trainings">
+    </Route>
+    <Route path="*" render={() => <h1>Page not found</h1>} />
+  </Switch>
         <List>
-          {links.map((object) => (
+        {links.map((object) => (
+          <Link href={object.link}>
             <ListItem button key={object.text}>
-              <ListItemIcon>
-                {object.icon} 
-              </ListItemIcon>
-              <ListItemText primary={object.text} />
-              </ListItem>
-          ))}
-        </List>
-      </Drawer>
-      <Box component="main" sx={{flexGrow: 1, paddingTop:8}}>
-        <div className="fullheight">
-         <CustomerList />
-        </div>
-
+                <ListItemIcon>
+                   {object.icon} 
+                </ListItemIcon>
+                <ListItemText primary={object.text} />
+                </ListItem>
+            </Link>
+        ))}
+      </List>
+    </Drawer>
+    <Box component="main" sx={{flexGrow: 1, paddingTop:8}}>
       </Box>
-    </Box>
-
-  );
+      </Router>
+    </div>
+    )
 }
 
-export default AppBarNavi;
+export default RouterLinks;
