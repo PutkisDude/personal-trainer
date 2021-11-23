@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import {CssBaseline, IconButton, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
+import {
+  CssBaseline, IconButton, List, 
+  ListItem, ListItemIcon, ListItemText, 
+  Toolbar, Typography, Link
+} from '@mui/material';
+import {BrowserRouter as Router,Switch,Route} from "react-router-dom";
 import MenuIcon from '@mui/icons-material/Menu';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -11,6 +16,7 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import CustomerList from './CustomerList';
+import Training from './Training';
 
 const drawerWidth = 180;
 
@@ -90,9 +96,9 @@ function AppBarNavi() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [links] = useState([
-    {text: 'Customers', icon: <AccountBoxIcon sx={{color:'white'}} />},
-    {text: 'Schedule', icon: <ScheduleIcon sx={{color:'white'}} />},
-    {text: 'Trainings', icon: <DirectionsRunIcon sx={{color:'white'}} />}
+    {text: 'Customers', icon: <AccountBoxIcon sx={{color:'white'}} />, link: '/'},
+    {text: 'Schedule', icon: <ScheduleIcon sx={{color:'white'}} />, link: '#'},
+    {text: 'Trainings', icon: <DirectionsRunIcon sx={{color:'white'}} />, link: '/trainings'}
   ])
 
   const handleDrawerOpen = () => {
@@ -104,6 +110,7 @@ function AppBarNavi() {
   };
 
   return (
+    <div className="fullheight">
     <Box className="fullheight" sx={{display:'flex'}}>
       <CssBaseline />
       <AppBar position="fixed" open={open} sx={{bgcolor:'#c05050'}}>
@@ -136,23 +143,32 @@ function AppBarNavi() {
 
         <List>
           {links.map((object) => (
+            <Link href={object.link}>
+
             <ListItem button key={object.text}>
-              <ListItemIcon>
-                {object.icon} 
-              </ListItemIcon>
+              <ListItemIcon> {object.icon} </ListItemIcon>
               <ListItemText primary={object.text} />
               </ListItem>
+              </Link>
           ))}
         </List>
       </Drawer>
       <Box component="main" sx={{flexGrow: 1, paddingTop:8}}>
         <div className="fullheight">
-         <CustomerList />
-        </div>
 
+        <Router>
+          <Switch>
+          <Route exact path="/" component={CustomerList} />
+          <Route path="/schedule" />
+          <Route path="/trainings" component={Training} />
+          <Route path="*" render={() => <h1>Page not found</h1>} /></Switch>
+          </Router>
+
+
+        </div>
       </Box>
     </Box>
-
+</div>
   );
 }
 
