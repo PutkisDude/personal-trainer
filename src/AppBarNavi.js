@@ -142,8 +142,8 @@ function AppBarNavi() {
         </DrawerHeader>
 
         <List>
-          {links.map((object) => (
-            <Link href={object.link}>
+          {links.map((object, index) => (
+            <Link key={index} href={object.link}>
 
             <ListItem button key={object.text}>
               <ListItemIcon> {object.icon} </ListItemIcon>

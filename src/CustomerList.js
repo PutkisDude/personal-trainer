@@ -12,8 +12,8 @@ function CustomerList() {
         FetchCustomers();
     }, [])
 
-    const FetchCustomers = () => {
-        fetch('https://customerrest.herokuapp.com/api/customers')
+    const FetchCustomers = async () => {
+        await fetch('https://customerrest.herokuapp.com/api/customers')
         .then(response => response.json())
         .then(data => setCustomers(data.content))
         .catch(err => console.error(err))
