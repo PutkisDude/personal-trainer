@@ -62,24 +62,49 @@ function CustomerList() {
                 })
             }
             if (action === 'del'){
-                DeleteCustomer();
+                console.log(params.data)
+                DeleteCustomer(params.data);
             }
             if (action === 'update'){
-                params.api.stopEditing(false);
+                params.api.stopEditing(false); // STOP EDITING = ACCEPT CHANGES -- WITHOUT THIS RESET VALUES
+                UpdateCustomer(params.data);
             }
             if (action === 'cancel'){
-                params.api.stopEditing(true);
+                params.api.stopEditing(true); // STOP EDITING = CANCEL CHANGES -- RESET VALUES
+                setSever("info")
+                setMsg("Change Canceled")
+                setSnackOpen(true);
             }
         }   
     }
 
-    const DeleteCustomer = url => {
-        fetch(url, {method: 'DELETE'})
+    const UpdateCustomer = data => {
+        fetch(data.links[0].href, {method: "PUT",
+                headers: {'Content-type' : 'application/json'},
+                body: JSON.stringify(data)
+            })
+        .then(response => {
+            if(response.ok){
+                FetchCustomers();
+                setSever("success")
+                setMsg("Customer updated");
+                setSnackOpen(true);
+            }else{
+                setSever("error")
+                setMsg("Update failed");
+                setSnackOpen(true);
+            }
+        })
+            .catch(e => console.error(e))
+    }
+
+    const DeleteCustomer = data => {
+        fetch(data.links[0].href, {method: 'DELETE'})
         .then(response => {
             if(response.ok){
                 FetchCustomers();
                 setSever('success')
-                setMsg("Customer Deleted");
+                setMsg("Deleted customer: "+ data.firstname + " " + data.lastname);
                 setSnackOpen(true);
             }else{
                 setSever("error");
