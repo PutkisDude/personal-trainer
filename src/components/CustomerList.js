@@ -17,13 +17,13 @@ function columnActions(params) {
 
     if (isCurrentRowEditing) {
         creRow.innerHTML = `
-        <button >update</button>
-        <button>cancel</button>
+        <button class="btn btn-sm btn-success bi bi-check-circle"" data-action="update" />
+        <button class="btn btn-sm btn-danger bi bi-x-circle" data-action="cancel" />
         `
     }else {
         creRow.innerHTML = `
-        <button class="btn btn-sm btn-success"><i class="bi bi-pencil-square"></i></button>
-        <button class="btn btn-sm btn"><i class="bi bi-trash" style="color:red"></button>
+        <button data-action="del" class="bi btn-light bi-trash btn btn-sm" />
+        <button data-action="edit" class="btn btn-sm btn-info bi bi-pencil-square square" />
         `
     }
 
@@ -44,48 +44,89 @@ function CustomerList() {
         .then(data => setCustomers(data.content))
         .catch(err => console.error(err))
     }
+
+    const actionActivated = params => {
+        if (params.column.colId === 'actions' && params.event.target.dataset.action) {
+            let action = params.event.target.dataset.action;
+            if (action === 'edit'){
+                params.api.startEditingCell({
+                    rowIndex : params.node.rowIndex,
+                    colKey : params.columnApi.getDisplayedCenterColumns()[0].colId
+                })
+            }
+            if (action === 'del'){
+                console.log("del")
+            }
+            if (action === 'update'){
+                params.api.stopEditing(false);
+            }
+            if (action === 'cancel'){
+                params.api.stopEditing(true);
+            }
+        }   
+    }
+
+    function editStarts(params) {
+        params.api.refreshCells({
+          columns: ["actions"],
+          rowNodes: [params.node],
+          force: true
+        });
+      }
+      function editStops(params) {
+        params.api.refreshCells({
+          columns: ["actions"],
+          rowNodes: [params.node],
+          force: true
+        });
+      }
     
     const defaultCol = {
         resizable:true, 
         sortable:true, 
         filter:true, 
         lockPosition: true,
-        floatingFilter: true
+        floatingFilter: true,
+        editable: true
     }
     
     const columns = [
-        {   headerName: 'Actions', editable:false, minWidth:60,
-             children: [
-            {headerName: 'Edit',
-                maxWidth:70, 
-                filter:false, 
-                sortable:false,
-                cellRenderer: columnActions}]
-    },
+        
         {headerName: 'Person information', floatingFilter:true, children: [
-            {headerName: 'First name',lockPosition: true, floatingFilter:true,field: 'firstname', width:150},
+            {headerName: 'First name',lockPosition: true, floatingFilter:true,field: 'firstname', width:120},
             {headerName: 'Last name', field: 'lastname', width: 120},
         ]},
         {headerName: 'Contact', children: [
             {field: 'email', sortable:false},
-            {field: 'phone', sortable:false, width:160, columnGroupShow: 'open'}
+            {field: 'phone', sortable:false, width:140, columnGroupShow: 'open'}
         ]
         },
         {headerName: 'Address', children: [
             {field: 'city', width:120,  columnGroupShow: 'close'},
-            {headerName:'Street Address', filter:false,field: 'streetaddress', columnGroupShow: 'open'},
-            {field: 'postcode', filter:false,columnGroupShow: 'open'}] }
+            {headerName:'Street Address', width: 150, filter:false,field: 'streetaddress', columnGroupShow: 'open'},
+            {field: 'postcode', filter:false, width: 80, columnGroupShow: 'open'}] },
+        {headerName: 'Actions',
+                maxWidth:80,
+                editable:false, 
+                filter:false, 
+                sortable:false,
+                colId : 'actions',
+                cellRenderer: columnActions}    
     ]
 
     return(
             <div className="ag-theme-balham-dark fullheight">
                 <AgGridReact
                 rowData={customers}
-                suppressRowClickEdit={true}
+                onRowEditingStopped={editStops}
+                onRowEditingStarted={editStarts}
+                onCellClicked={actionActivated}
+                suppressClickEdit={true}
                 columnDefs={columns}
                 defaultColDef={defaultCol}
                 pagination={true}
                 paginationPageSize={10}
+                editType="fullRow"
                 />
             </div>
     )
