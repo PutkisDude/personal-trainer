@@ -2,9 +2,13 @@ import React, {useEffect, useState} from "react";
 import {AgGridReact} from 'ag-grid-react';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham-dark.css';
+
 
 function columnActions(params) {
     let creRow = document.createElement("div");
@@ -22,7 +26,7 @@ function columnActions(params) {
         `
     }else {
         creRow.innerHTML = `
-        <button data-action="del" class="bi btn-light bi-trash btn btn-sm" />
+        <button data-action="del"class="bi btn-light bi-trash btn btn-sm"/>
         <button data-action="edit" class="btn btn-sm btn-info bi bi-pencil-square square" />
         `
     }
@@ -33,6 +37,9 @@ function columnActions(params) {
 function CustomerList() {
 
     const [customers, setCustomers] = useState([]);
+    const [snackOpen, setSnackOpen] = useState(false);
+    const [msg, setMsg] = useState("");
+    const [sever, setSever] = useState("success");
 
     useEffect(() => {
         FetchCustomers();
@@ -55,7 +62,7 @@ function CustomerList() {
                 })
             }
             if (action === 'del'){
-                console.log("del")
+                DeleteCustomer();
             }
             if (action === 'update'){
                 params.api.stopEditing(false);
@@ -64,6 +71,22 @@ function CustomerList() {
                 params.api.stopEditing(true);
             }
         }   
+    }
+
+    const DeleteCustomer = url => {
+        fetch(url, {method: 'DELETE'})
+        .then(response => {
+            if(response.ok){
+                FetchCustomers();
+                setSever('success')
+                setMsg("Customer Deleted");
+                setSnackOpen(true);
+            }else{
+                setSever("error");
+                setMsg("Oops! Something went wrong");
+                setSnackOpen(true);
+            }
+        })
     }
 
     function editStarts(params) {
@@ -110,6 +133,7 @@ function CustomerList() {
                 editable:false, 
                 filter:false, 
                 sortable:false,
+                field: 'links.self.href',
                 colId : 'actions',
                 cellRenderer: columnActions}    
     ]
@@ -128,6 +152,15 @@ function CustomerList() {
                 paginationPageSize={10}
                 editType="fullRow"
                 />
+
+            <Snackbar
+                open={snackOpen}
+                autoHideDuration={1500}
+                onClose={() => setSnackOpen(false)}
+                message={msg}
+            >
+                <Alert variant="filled" severity={sever}>{msg}</Alert>
+            </Snackbar>
             </div>
     )
 
