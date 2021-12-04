@@ -62,9 +62,14 @@ function CustomerList() {
                 })
             }
             if (action === 'del'){
-                console.log(params.data)
+                if (window.confirm("Are you sure?")){
                 DeleteCustomer(params.data);
+            }else {
+                setMsg("Cancel delete");
+                setSever("info");
+                setSnackOpen(true);
             }
+        }
             if (action === 'update'){
                 params.api.stopEditing(false); // STOP EDITING = ACCEPT CHANGES -- WITHOUT THIS RESET VALUES
                 UpdateCustomer(params.data);
@@ -72,7 +77,7 @@ function CustomerList() {
             if (action === 'cancel'){
                 params.api.stopEditing(true); // STOP EDITING = CANCEL CHANGES -- RESET VALUES
                 setSever("info")
-                setMsg("Change Canceled")
+                setMsg("Cancel changes")
                 setSnackOpen(true);
             }
         }   
@@ -87,7 +92,7 @@ function CustomerList() {
             if(response.ok){
                 FetchCustomers();
                 setSever("success")
-                setMsg("Customer updated");
+                setMsg("Updated customer");
                 setSnackOpen(true);
             }else{
                 setSever("error")
@@ -180,7 +185,7 @@ function CustomerList() {
 
             <Snackbar
                 open={snackOpen}
-                autoHideDuration={1500}
+                autoHideDuration={1800}
                 onClose={() => setSnackOpen(false)}
                 message={msg}
             >
