@@ -1,8 +1,34 @@
 import React, {useEffect, useState} from "react";
 import {AgGridReact} from 'ag-grid-react';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham-dark.css';
+
+function columnActions(params) {
+    let creRow = document.createElement("div");
+
+    let editingCells = params.api.getEditingCells();
+
+    let isCurrentRowEditing = editingCells.some((cell) => {
+        return cell.rowIndex === params.node.rowIndex;
+    });
+
+    if (isCurrentRowEditing) {
+        creRow.innerHTML = `
+        <button >update</button>
+        <button>cancel</button>
+        `
+    }else {
+        creRow.innerHTML = `
+        <button class="btn btn-sm btn-success"><i class="bi bi-pencil-square"></i></button>
+        <button class="btn btn-sm btn"><i class="bi bi-trash" style="color:red"></button>
+        `
+    }
+
+    return creRow;
+}
 
 function CustomerList() {
 
@@ -28,9 +54,17 @@ function CustomerList() {
     }
     
     const columns = [
+        {   headerName: 'Actions', editable:false, minWidth:60,
+             children: [
+            {headerName: 'Edit',
+                maxWidth:70, 
+                filter:false, 
+                sortable:false,
+                cellRenderer: columnActions}]
+    },
         {headerName: 'Person information', floatingFilter:true, children: [
             {headerName: 'First name',lockPosition: true, floatingFilter:true,field: 'firstname', width:150},
-            {headerName: 'Last name', field: 'lastname', width: 150},
+            {headerName: 'Last name', field: 'lastname', width: 120},
         ]},
         {headerName: 'Contact', children: [
             {field: 'email', sortable:false},
@@ -47,6 +81,7 @@ function CustomerList() {
             <div className="ag-theme-balham-dark fullheight">
                 <AgGridReact
                 rowData={customers}
+                suppressRowClickEdit={true}
                 columnDefs={columns}
                 defaultColDef={defaultCol}
                 pagination={true}

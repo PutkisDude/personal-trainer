@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import AppBarNavi from './AppBarNavi';
+import AppBarNavi from './components/AppBarNavi';
 
 
 function App() {
