@@ -6,23 +6,25 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import MobileDateTimePicker from '@mui/lab/MobileDateTimePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+
+// import moment from "moment";
+import MomentUtils from "@date-io/moment";
+
+
 
 function AddTraining(props){
 
-    const [open, setOpen] = React.useState(false);
+
     const [training, setTraining] = useState({
-        date : '',
+        date : new Date(),
         activity: '',
         duration: '',
         customer: ''
     })
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    }
-
     const handleClose = () => {
-        setOpen(false);
         props.closeWindow(false);
     }
 
@@ -33,12 +35,10 @@ function AddTraining(props){
     const handleSave = () => {
         // props.add(customer);
         console.log("import works")
+        console.log(training);
         handleClose();
         // prop.setCopen();
     }
-
-    //
-
 
     return(
         <div>
@@ -47,18 +47,18 @@ function AddTraining(props){
         <DialogTitle>Add New Training</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Fill the information
+            Fill the information {training.customer}
           </DialogContentText>
-          <TextField
-            margin="dense"
-            name="date"
-            value={training.date}
-            onChange={inputChanged}
-            label="Date"
-            fullWidth
-            variant="standard"
+
+          <LocalizationProvider dateAdapter={MomentUtils}>
+           <MobileDateTimePicker
+              value={training.date}
+              onChange={(newValue) => {setTraining({...training, 'date': newValue})}}
+             renderInput={(params) => <TextField {...params} />}
           />
-                    <TextField
+        </LocalizationProvider>
+
+          <TextField
             margin="dense"
             name="activity"
             value={training.activity}
@@ -78,10 +78,10 @@ function AddTraining(props){
           />
         <TextField
             margin="dense"
-            name="postcode"
+            name="customer"
             value={training.customer}
             onChange={inputChanged}
-            label="Postcode"
+            label="Customer"
             fullWidth
             variant="standard"
           />
@@ -98,3 +98,14 @@ function AddTraining(props){
 }
 
 export default AddTraining;
+
+/*
+          <TextField
+            margin="dense"
+            name="date"
+            value={training.date}
+            onChange={inputChanged}
+            label="Date"
+            fullWidth
+            variant="standard"
+          /> */

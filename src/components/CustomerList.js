@@ -77,7 +77,6 @@ function CustomerList() {
                 console.log("works")
                 setCustOpen(true)
                 console.log(params.data.links)
-                return <AddTraining />
             }
 
             if (action === 'update'){
@@ -207,7 +206,7 @@ function CustomerList() {
     return(
             <div className="ag-theme-balham-dark fullheight">
                 <AddCustomer addCustomer={addCustomer} />
-                <AddTraining closeWindow={setCustOpen} open={addCustOpen} />
+                <AddTraining closeWindow={setCustOpen} open={addCustOpen} customer={null} />
                 <AgGridReact
                     rowData={customers}
                     onRowEditingStopped={editStops}
