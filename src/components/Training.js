@@ -2,7 +2,8 @@ import React, {useEffect, useState} from "react";
 import {AgGridReact} from 'ag-grid-react';
 import moment from "moment";
 
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton } from '@mui/material';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham-dark.css';
 
@@ -31,6 +32,19 @@ function Training() {
         }
     }
 
+    const DeleteTraining = params => {
+        if(window.confirm("are you sure?")){
+            fetch('https://customerrest.herokuapp.com/api/trainings/' + params.data.id, {method:'DELETE'})
+            .then(response => {
+                if(response.ok) {
+                    FetchTrainings();
+                }else{alert("Fail")}
+            })
+            .catch(e => console.error(e))
+        }
+
+    }
+
     const columns = [
         {headerName : 'Activity', field:'activity', width:140},
         {headerName : 'Date', field: 'date', width:190,
@@ -38,8 +52,16 @@ function Training() {
             return data.value ? moment(data.value).utcOffset(data.value).format('llll') : '';
         }},
         {headerName : 'Duration (min)', field: 'duration', width : 130},
-        {headerName: 'Customer', field: 'firstname', valueGetter: fullname}
-    ]
+        {headerName: 'Customer', field: 'firstname', valueGetter: fullname},
+        {headerName: 'Delete', sortable: false, editable: false, filter: false, width:65,
+        cellRendererFramework: params => 
+            <IconButton aria-label='delete' onClick={() => DeleteTraining(params)}>
+                 <DeleteIcon color='error' fontSize="small" />
+            </IconButton>
+        }    
+        ]
+
+
 
     const defaultCol = {
         resizable:true, 
