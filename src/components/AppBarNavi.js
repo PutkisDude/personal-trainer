@@ -18,8 +18,6 @@ import ScheduleIcon from '@mui/icons-material/Schedule';
 import CustomerList from './CustomerList';
 import Training from './Training';
 
-import Content from './snackbar/Content';
-import MySnackbar from './snackbar/MySnackbar';
 
 const drawerWidth = 180;
 
@@ -154,7 +152,6 @@ function AppBarNavi() {
               </ListItem>
               </Link>
           ))}
-                    <Content />
         </List>
       </Drawer>
       <Box component="main" sx={{flexGrow: 1, paddingTop:8}}>
