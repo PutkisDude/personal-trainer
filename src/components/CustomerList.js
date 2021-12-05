@@ -5,12 +5,12 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
+import AddCustomer from "./AddCustomer";
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham-dark.css';
 
-
-function columnActions(params) {
+const columnActions = params => {
     let creRow = document.createElement("div");
 
     let editingCells = params.api.getEditingCells();
@@ -30,7 +30,6 @@ function columnActions(params) {
         <button data-action="edit" class="btn btn-sm btn-info bi bi-pencil-square square" />
         `
     }
-
     return creRow;
 }
 
@@ -83,6 +82,28 @@ function CustomerList() {
         }   
     }
 
+    const addCustomer = customer => {
+        fetch('https://customerrest.herokuapp.com/api/customers',
+        {
+            method: 'POST',
+            headers: {'Content-type' : 'application/json'},
+            body: JSON.stringify(customer)
+        })
+        .then(response => {
+            if(response.ok){
+                FetchCustomers();
+                setMsg("Customer added.");
+                setSever("success");
+                setSnackOpen(true);
+            }else{
+                setMsg("Oops! Something went wrong!");
+                setSever("error");
+                setSnackOpen(true);
+            }
+        }).catch(e => console.error(e))
+        
+    }
+
     const UpdateCustomer = data => {
         fetch(data.links[0].href, {method: "PUT",
                 headers: {'Content-type' : 'application/json'},
@@ -119,14 +140,14 @@ function CustomerList() {
         })
     }
 
-    function editStarts(params) {
+    const editStarts = params => {
         params.api.refreshCells({
           columns: ["actions"],
           rowNodes: [params.node],
           force: true
         });
       }
-      function editStops(params) {
+    const editStops = params =>  {
         params.api.refreshCells({
           columns: ["actions"],
           rowNodes: [params.node],
@@ -156,20 +177,24 @@ function CustomerList() {
         },
         {headerName: 'Address', children: [
             {field: 'city', width:120,  columnGroupShow: 'close'},
-            {headerName:'Street Address', width: 150, filter:false,field: 'streetaddress', columnGroupShow: 'open'},
+            {headerName:'Street Address', width: 150, filter:false, field: 'streetaddress', columnGroupShow: 'open'},
             {field: 'postcode', filter:false, width: 80, columnGroupShow: 'open'}] },
-        {headerName: 'Actions',
+        
+        {headerName: 'Add', children: [
+            {headerName: 'Actions',
                 maxWidth:80,
                 editable:false, 
                 filter:false, 
                 sortable:false,
                 field: 'links.self.href',
                 colId : 'actions',
-                cellRenderer: columnActions}    
+                cellRenderer: columnActions}
+            ]}    
     ]
 
     return(
             <div className="ag-theme-balham-dark fullheight">
+                <AddCustomer addCustomer={addCustomer} />
                 <AgGridReact
                 rowData={customers}
                 onRowEditingStopped={editStops}
