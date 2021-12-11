@@ -11,24 +11,20 @@ function Schedule() {
 
     const [events, setEvents] = useState([{}])
 
-
-
     const fetchTraingings = () => {
         fetch('https://customerrest.herokuapp.com/gettrainings')
         .then(res => res.json())
         .then(data => {
             let tempArr = [{}];
-            console.log(data);
             for(let i = 0; i < data.length; i++){
                 let customer = '';
                 let activityStart = new Date(data[i].date);
-                let activityEnd = new Date(activityStart.getTime() + data[i].duration);
+                let activityEnd = new Date(activityStart.getTime() + data[i].duration * 60000);
                 if(data[i].customer != null) { customer = data[i].customer.firstname + ' ' + data[i].customer.lastname;}
-                let title = customer + ' ' + data[i].activity;
+                let title = data[i].activity + " " + customer;
 
                 let tempEvent = {title : title, start: activityStart, end: activityEnd, duration: data.duration};
                 tempArr[i] = tempEvent;
-                console.log(tempEvent);
             }
             setEvents(tempArr);
         })
@@ -40,28 +36,34 @@ function Schedule() {
     }, [])
 
     return(
+        <div style={{background:'#6a8070'}}>
         <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, bootstrapPlugin]}
             events={events}
-            initialView="timeGridWeek"
             height="auto"
+            initialView="timeGridWeek"
             themeSystem="bootstrap"
             headerToolbar={{
-                start: "dayGridMonth,timeGridWeek,timeGridDay",
-                center: 'prev,today,next',
-                end : 'title'
+                start : 'prev,next today',
+                center: 'title',
+                end: "dayGridMonth,timeGridWeek,timeGridDay"
             }}
+            nowIndicator="true"
+            allDaySlot="false"
+
+            slotMinTime="07:00:00"
+            slotMaxTime="24:00:00"
             
+            weekText=''
             displayEventTime='true'
             displayEventEnd='true'
             eventColor='red'
         
             eventDisplay='block'
-            eventBackgroundColor='navy'
+            eventBackgroundColor='#db8e4f'
             weekNumbers='true'
-
-
         />
+        </div>
     )
 }
 
