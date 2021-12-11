@@ -11,13 +11,7 @@ function AddCustomer(props){
 
     const [open, setOpen] = React.useState(false);
     const [customer, setCustomer] = useState({
-        firstname : '',
-        lastname: '',
-        streetaddress: '',
-        postcode: '',
-        city: '',
-        email: '',
-        phone: ''
+        firstname : '', lastname: '', streetaddress: '', postcode: '', city: '', email: '', phone: ''
     })
 
     const handleClickOpen = () => {
@@ -38,8 +32,8 @@ function AddCustomer(props){
     }
 
     return(
-        <div>
-        <button className="btn btn-danger btn-sm bi bi-person-plus-fill" onClick={handleClickOpen} style={{margin:3}}> Add user</button>
+        <>
+        <Button variant="contained" size="small" color="error" onClick={handleClickOpen} style={{margin:3}}> Add user</Button>
 
       <Dialog open={open} onClose={handleClose} style={{backgroundColor: 'red'}}>
         <DialogTitle>Add New Customer</DialogTitle>
@@ -118,7 +112,7 @@ function AddCustomer(props){
             <Button onClick={handleClose}>Cancel</Button>
         </DialogActions>
       </Dialog>
-        </div>
+        </>
 
     );
 }

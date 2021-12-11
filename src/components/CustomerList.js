@@ -10,6 +10,7 @@ import AddTraining from "./AddTraining";
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham-dark.css';
+import { Button } from "@mui/material";
 
 const columnActions = params => {
     let creRow = document.createElement("div");
@@ -28,7 +29,7 @@ const columnActions = params => {
         `
     }else {
         creRow.innerHTML = `
-        <button data-action="del"class="bi btn-danger bi-trash btn btn-sm"></button>
+        <button data-action="del" class="bi btn-danger bi-trash btn btn-sm"></button>
         <button data-action="edit" class="btn btn-sm btn-info bi bi-pencil-square square"></button>
         `
      }
@@ -186,7 +187,7 @@ function CustomerList() {
             {headerName:'Street Address', width: 150, filter:false, field: 'streetaddress', columnGroupShow: 'open', colId : 'addr'},
             {field: 'postcode', filter:false, width: 80, columnGroupShow: 'open', colId : 'postc'}] },
         
-        {headerName: 'Actions', width:240,  children: [
+        {headerName: 'Actions',  children: [
             {headerName: 'Modify',
                 width:80,
                 editable:false, 
@@ -213,7 +214,10 @@ function CustomerList() {
 
     return(
             <div className="ag-theme-balham-dark fullheight">
-                <AddCustomer addCustomer={addCustomer} /><button onClick={() => exportCustomers()}>Export csv</button>
+                
+                <AddCustomer addCustomer={addCustomer} />
+                <Button color="warning" size="small" variant="contained" onClick={() => exportCustomers()}>Export csv</Button>
+
                 <AgGridReact
                     rowData={customers}
                     onRowEditingStopped={editStops}

@@ -50,7 +50,7 @@ function AddTraining(props){
 
     return(
         <div>
-          <Button onClick={handleOpen} class="btn btn-sm btn-success bi bi-calendar-plus" />
+          <button variant="contained"onClick={handleOpen} className="btn btn-sm btn-success bi bi-calendar-plus" ></button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Customer {props.customer.firstname + ' ' + props.customer.lastname} - New Training</DialogTitle>
         <DialogContent>
