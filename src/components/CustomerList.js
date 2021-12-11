@@ -41,6 +41,7 @@ function CustomerList() {
     const [snackOpen, setSnackOpen] = useState(false);
     const [msg, setMsg] = useState("");
     const [sever, setSever] = useState("success");
+    const [gridApi, setGridApi] = useState(null);
 
     useEffect(() => {
         FetchCustomers();
@@ -57,6 +58,19 @@ function CustomerList() {
         setSever(sever);
         setMsg(msg);
         setSnackOpen(true);
+    }
+
+    const exportCustomers = () => {
+        var params = {
+            skipGroups: true,
+            fileName: "customers.csv",
+            columnKeys : ['fname', 'lname', 'email', 'phone',  'city', 'addr', 'postc']
+        };
+        gridApi.exportDataAsCsv(params);
+    }
+
+    const onGridReady = (params) => {
+        setGridApi(params.api);
     }
 
     const actionActivated = params => {
@@ -159,20 +173,20 @@ function CustomerList() {
     const columns = [
         
         {headerName: 'Person information', floatingFilter:true, children: [
-            {headerName: 'First name',lockPosition: true, floatingFilter:true,field: 'firstname', width:120},
-            {headerName: 'Last name', field: 'lastname', width: 120},
+            {headerName: 'First name',lockPosition: true, floatingFilter:true,field: 'firstname', width:120, colId : 'fname'},
+            {headerName: 'Last name', field: 'lastname', width: 120, colId : 'lname'},
         ]},
         {headerName: 'Contact', children: [
-            {field: 'email', sortable:false},
-            {field: 'phone', sortable:false, width:140, columnGroupShow: 'open'}
+            {field: 'email', sortable:false, colId : 'email'},
+            {field: 'phone', sortable:false, width:140, columnGroupShow: 'open', colId : 'phone'}
         ]
         },
         {headerName: 'Address', children: [
-            {field: 'city', width:120,  columnGroupShow: 'close'},
-            {headerName:'Street Address', width: 150, filter:false, field: 'streetaddress', columnGroupShow: 'open'},
-            {field: 'postcode', filter:false, width: 80, columnGroupShow: 'open'}] },
+            {field: 'city', width:120,  columnGroupShow: 'close', colId: 'city'},
+            {headerName:'Street Address', width: 150, filter:false, field: 'streetaddress', columnGroupShow: 'open', colId : 'addr'},
+            {field: 'postcode', filter:false, width: 80, columnGroupShow: 'open', colId : 'postc'}] },
         
-        {headerName: 'Actions', width:240, children: [
+        {headerName: 'Actions', width:240,  children: [
             {headerName: 'Modify',
                 width:80,
                 editable:false, 
@@ -199,7 +213,7 @@ function CustomerList() {
 
     return(
             <div className="ag-theme-balham-dark fullheight">
-                <AddCustomer addCustomer={addCustomer} />
+                <AddCustomer addCustomer={addCustomer} /><button onClick={() => exportCustomers()}>Export csv</button>
                 <AgGridReact
                     rowData={customers}
                     onRowEditingStopped={editStops}
@@ -208,8 +222,9 @@ function CustomerList() {
                     suppressClickEdit={true}
                     columnDefs={columns}
                     defaultColDef={defaultCol}
+                    onGridReady={onGridReady}
                     pagination={true}
-                    paginationPageSize={10}
+                    paginationPageSize={12}
                     editType="fullRow"
                 />
                 

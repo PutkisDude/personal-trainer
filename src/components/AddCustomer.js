@@ -41,8 +41,7 @@ function AddCustomer(props){
         <div>
         <button className="btn btn-danger btn-sm bi bi-person-plus-fill" onClick={handleClickOpen} style={{margin:3}}> Add user</button>
 
-      <Dialog open={open} onClose={handleClose}
-      style={{backgroundColor: 'red'}}>
+      <Dialog open={open} onClose={handleClose} style={{backgroundColor: 'red'}}>
         <DialogTitle>Add New Customer</DialogTitle>
         <DialogContent>
           <DialogContentText>
