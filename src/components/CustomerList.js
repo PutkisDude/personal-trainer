@@ -30,7 +30,6 @@ const columnActions = params => {
         creRow.innerHTML = `
         <button data-action="del"class="bi btn-danger bi-trash btn btn-sm"></button>
         <button data-action="edit" class="btn btn-sm btn-info bi bi-pencil-square square"></button>
-        <button data-action="addtraining" class="btn btn-sm btn-success bi bi-calendar-plus"></button>
         `
      }
     return creRow;
@@ -42,7 +41,6 @@ function CustomerList() {
     const [snackOpen, setSnackOpen] = useState(false);
     const [msg, setMsg] = useState("");
     const [sever, setSever] = useState("success");
-    const [addCustOpen, setCustOpen] = useState(false);
 
     useEffect(() => {
         FetchCustomers();
@@ -53,6 +51,12 @@ function CustomerList() {
         .then(response => response.json())
         .then(data => setCustomers(data.content))
         .catch(err => console.error(err))
+    }
+
+    const showMsg = (msg, sever) => {
+        setSever(sever);
+        setMsg(msg);
+        setSnackOpen(true);
     }
 
     const actionActivated = params => {
@@ -68,26 +72,16 @@ function CustomerList() {
                 if (window.confirm("Are you sure?")){  // MUI dialogilla olisin voinut tehdä nätimmänkin :)
                 DeleteCustomer(params.data);
                 } else {
-                setMsg("Cancel delete");
-                setSever("info");
-                setSnackOpen(true);
+                    showMsg("Cancel Delete", "info")
             }
         }
-            if (action === 'addtraining'){
-                console.log("works")
-                setCustOpen(true)
-                console.log(params.data.links)
-            }
-
             if (action === 'update'){
                 params.api.stopEditing(false); // STOP EDITING = ACCEPT CHANGES -- WITHOUT THIS RESET VALUES
                 UpdateCustomer(params.data);
             }
             if (action === 'cancel'){
                 params.api.stopEditing(true); // STOP EDITING = CANCEL CHANGES -- RESET VALUES
-                setSever("info")
-                setMsg("Cancel changes")
-                setSnackOpen(true);
+                showMsg("Cancel changes", "info");
             }
         }   
     }
@@ -117,13 +111,9 @@ function CustomerList() {
         .then(response => {
             if(response.ok){
                 FetchCustomers();
-                setMsg("Customer added.");
-                setSever("success");
-                setSnackOpen(true);
+                showMsg("Customer added.", "success");
             }else{
-                setMsg("Oops! Something went wrong!");
-                setSever("error");
-                setSnackOpen(true);
+                showMsg("Oops! Something went wrong", "error");
             }
         }).catch(e => console.error(e))
         
@@ -137,13 +127,9 @@ function CustomerList() {
         .then(response => {
             if(response.ok){
                 FetchCustomers();
-                setSever("success")
-                setMsg("Updated customer");
-                setSnackOpen(true);
+                showMsg("Updated customer", "success");
             }else{
-                setSever("error")
-                setMsg("Update failed");
-                setSnackOpen(true);
+                showMsg("Update failed", "error");
             }
         })
             .catch(e => console.error(e))
@@ -154,13 +140,9 @@ function CustomerList() {
         .then(response => {
             if(response.ok){
                 FetchCustomers();
-                setSever('success')
-                setMsg("Deleted customer: "+ data.firstname + " " + data.lastname);
-                setSnackOpen(true);
+                showMsg(("Deleted customer " + data.firstname + " " + data.lastname), "success")
             }else{
-                setSever("error");
-                setMsg("Oops! Something went wrong");
-                setSnackOpen(true);
+                showMsg("Oops! Something went wrong", "error");
             }
         })
     }
@@ -190,15 +172,27 @@ function CustomerList() {
             {headerName:'Street Address', width: 150, filter:false, field: 'streetaddress', columnGroupShow: 'open'},
             {field: 'postcode', filter:false, width: 80, columnGroupShow: 'open'}] },
         
-        {headerName: 'Customer', children: [
-            {headerName: 'Actions',
-                width:120,
+        {headerName: 'Actions', width:240, children: [
+            {headerName: 'Modify',
+                width:80,
                 editable:false, 
                 filter:false, 
                 sortable:false,
                 field: 'links.self.href',
                 colId : 'actions',
                 cellRenderer: columnActions
+                },
+            {
+                headerName: 'AT',
+                width:45,
+                editable: false,
+                filter: false,
+                sortable : false,
+                field: 'links.self.href',
+                colId : 'addtrain',
+                cellRendererFramework : params => {
+                    return (<AddTraining showMsg={showMsg} customer={params.data} />)
+                }
             }
             ]}    
     ]
@@ -206,7 +200,6 @@ function CustomerList() {
     return(
             <div className="ag-theme-balham-dark fullheight">
                 <AddCustomer addCustomer={addCustomer} />
-                <AddTraining closeWindow={setCustOpen} open={addCustOpen} customer={null} />
                 <AgGridReact
                     rowData={customers}
                     onRowEditingStopped={editStops}

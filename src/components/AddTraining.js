@@ -4,57 +4,68 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import MobileDateTimePicker from '@mui/lab/MobileDateTimePicker';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-
-// import moment from "moment";
-import MomentUtils from "@date-io/moment";
-
-
+import InputLabel from '@mui/material/InputLabel';
 
 function AddTraining(props){
 
+    const [open, setOpen] = useState(false);
+    const [training, setTraining] = useState({ date : new Date(), activity: '', duration: 0, customer : ' '})
 
-    const [training, setTraining] = useState({
-        date : new Date(),
-        activity: '',
-        duration: '',
-        customer: ''
-    })
+
+    const handleOpen = () => {
+      setTraining({...training, customer : props.customer.links[0].href})
+      setOpen(true)
+    }
 
     const handleClose = () => {
-        props.closeWindow(false);
+      setOpen(false);
     }
 
     const inputChanged = e => {
         setTraining({...training, [e.target.name] : e.target.value})
     }
 
+    const dateInPutChanged = value => {
+      setTraining({ ...training, date: value })
+    }
+
     const handleSave = () => {
-        // props.add(customer);
-        console.log("import works")
-        console.log(training);
+
+        setTraining({...training, customer : props.customer.links[0].href});
+        
+      fetch('https://customerrest.herokuapp.com/api/trainings', {method: 'POST', 
+      headers: {'Content-type' : 'application/json'}, body: JSON.stringify(training) })
+      .then(res => {
         handleClose();
-        // prop.setCopen();
+        props.showMsg("Training added", "success")
+      })
+      .catch(e => console.error(e))
+      props.showMsg("Something went wrong..", "error");
     }
 
     return(
         <div>
-      <Dialog open={props.open} onClose={handleClose}
-      style={{backgroundColor: 'red'}}>
-        <DialogTitle>Add New Training</DialogTitle>
+          <Button onClick={handleOpen} class="btn btn-sm btn-success bi bi-calendar-plus" />
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Customer {props.customer.firstname + ' ' + props.customer.lastname} - New Training</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Fill the information {training.customer}
-          </DialogContentText>
 
-          <LocalizationProvider dateAdapter={MomentUtils}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <InputLabel>Date and Time</InputLabel>
            <MobileDateTimePicker
               value={training.date}
-              onChange={(newValue) => {setTraining({...training, 'date': newValue})}}
-             renderInput={(params) => <TextField {...params} />}
+              format="dd.mm.yyyy hh:mm"
+              variant="standard"
+              fullWidth
+              required
+              name="date"
+              onChange={(val) => dateInPutChanged(val)}
+             renderInput={(props) => <TextField {...props} />}
           />
         </LocalizationProvider>
 
@@ -66,6 +77,7 @@ function AddTraining(props){
             label="Activity"
             fullWidth
             variant="standard"
+            required
           />
                     <TextField
             margin="dense"
@@ -75,15 +87,7 @@ function AddTraining(props){
             label="Duration (mins)"
             fullWidth
             variant="standard"
-          />
-        <TextField
-            margin="dense"
-            name="customer"
-            value={training.customer}
-            onChange={inputChanged}
-            label="Customer"
-            fullWidth
-            variant="standard"
+            required
           />
         
         </DialogContent>
@@ -98,14 +102,3 @@ function AddTraining(props){
 }
 
 export default AddTraining;
-
-/*
-          <TextField
-            margin="dense"
-            name="date"
-            value={training.date}
-            onChange={inputChanged}
-            label="Date"
-            fullWidth
-            variant="standard"
-          /> */
