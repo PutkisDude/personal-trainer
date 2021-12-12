@@ -157,7 +157,8 @@ function App() {
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{flexGrow: 2, paddingTop:8}}>
+      <Box component="main" sx={{flexGrow: 2}}>
+      <DrawerHeader />
 
         <Router>
           <Switch>
@@ -166,8 +167,6 @@ function App() {
           <Route path="/trainings" component={Training} />
           <Route path="*" render={() => <h1>Page not found</h1>} /></Switch>
           </Router>
-
-
       </Box>
     </Box>
 </div>
