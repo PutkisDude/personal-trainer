@@ -7,18 +7,22 @@ import {
   Toolbar, Typography, Link
 } from '@mui/material';
 import {BrowserRouter as Router,Switch,Route} from "react-router-dom";
-import MenuIcon from '@mui/icons-material/Menu';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
-import ScheduleIcon from '@mui/icons-material/Schedule';
+
 import CustomerList from './components/CustomerList';
 import Training from './components/Training';
 import Schedule from './components/Schedule';
+import Statistic from './components/Statistic';
 import './App.css';
+
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ScheduleIcon from '@mui/icons-material/Schedule';
+import QueryStatsIcon from '@mui/icons-material/QueryStats';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 
 
 const drawerWidth = 180;
@@ -99,7 +103,8 @@ function App() {
   const [links] = useState([
     {text: 'Customers', icon: <AccountBoxIcon sx={{color:'white'}} />, link: '/'},
     {text: 'Schedule', icon: <ScheduleIcon sx={{color:'white'}} />, link: '/schedule'},
-    {text: 'Trainings', icon: <DirectionsRunIcon sx={{color:'white'}} />, link: '/trainings'}
+    {text: 'Trainings', icon: <DirectionsRunIcon sx={{color:'white'}} />, link: '/trainings'},
+    {text: 'Statistics', icon: <QueryStatsIcon sx={{color:'white'}} />, link: '/statistics' }
   ])
 
   const handleDrawerOpen = () => {
@@ -158,6 +163,7 @@ function App() {
           <Route exact path="/" component={CustomerList} />
           <Route path="/schedule" component={Schedule} />
           <Route path="/trainings" component={Training} />
+          <Route path="/statistics" component={Statistic} />
           <Route path="*" render={() => <h1>Page not found</h1>} /></Switch>
           </Router>
       </Box>
