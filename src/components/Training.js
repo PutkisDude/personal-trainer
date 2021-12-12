@@ -42,7 +42,6 @@ function Training() {
             })
             .catch(e => console.error(e))
         }
-
     }
 
     const columns = [
@@ -61,8 +60,6 @@ function Training() {
         }    
         ]
 
-
-
     const defaultCol = {
         resizable:true, 
         sortable:true, 
@@ -73,14 +70,15 @@ function Training() {
     }
 
     return (
-         <div className="ag-theme-balham-dark fullheight">
-                <AgGridReact
+         <div className="ag-theme-balham-dark">
+            <AgGridReact
                 rowData={trainings}
                 columnDefs={columns}
                 defaultColDef={defaultCol}
                 pagination={true}
                 paginationPageSize={10}
-                />
+                domLayout="autoHeight"
+            />
             </div>
 )
 

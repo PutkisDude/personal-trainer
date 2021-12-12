@@ -2,9 +2,6 @@ import React, {useEffect, useState} from "react";
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import 'bootstrap/dist/css/bootstrap.css';
-import '@fortawesome/fontawesome-free/css/all.css'; // needs additional webpack config!
-import bootstrapPlugin from '@fullcalendar/bootstrap';
 
 
 function Schedule() {
@@ -36,13 +33,13 @@ function Schedule() {
     }, [])
 
     return(
-        <div style={{background:'#6a8070'}}>
+        <div style={{background:'grey'}}>
         <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, bootstrapPlugin]}
+            plugins={[dayGridPlugin, timeGridPlugin]}
             events={events}
             height="auto"
             initialView="timeGridWeek"
-            themeSystem="bootstrap"
+            themeSystem="standard"
             headerToolbar={{
                 start : 'prev,next today',
                 center: 'title',
@@ -60,7 +57,7 @@ function Schedule() {
             eventColor='red'
         
             eventDisplay='block'
-            eventBackgroundColor='#db8e4f'
+            eventBackgroundColor='black'
             weekNumbers='true'
         />
         </div>

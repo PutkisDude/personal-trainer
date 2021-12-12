@@ -23,8 +23,6 @@ import './App.css';
 
 const drawerWidth = 180;
 
-
-
 const openedMixin = (theme) => ({
   width: drawerWidth,
   transition: theme.transitions.create('width', {
@@ -94,7 +92,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-
 function App() {
 
   const theme = useTheme();
@@ -115,7 +112,7 @@ function App() {
 
   return (
     <div className="fullheight">
-    <Box className="fullheight" sx={{display:'flex'}}>
+    <Box sx={{display:'flex'}}>
       <CssBaseline />
       <AppBar position="fixed" open={open} sx={{bgcolor:'#c05050'}}>
         <Toolbar>
@@ -135,7 +132,6 @@ function App() {
             Total Gym 2021
           </Typography>
         </Toolbar>
-   
       </AppBar>
 
       <Drawer variant="permanent" open={open}>
@@ -144,11 +140,9 @@ function App() {
             {theme.direction === 'rtl' ? <ChevronRightIcon sx={{color:'white'}} /> : <ChevronLeftIcon sx={{color:'white'}} />}
           </IconButton>
         </DrawerHeader>
-
         <List>
           {links.map((object, index) => (
             <Link key={index} href={object.link}>
-
             <ListItem button key={object.text}>
               <ListItemIcon> {object.icon} </ListItemIcon>
               <ListItemText primary={object.text} />
@@ -159,7 +153,6 @@ function App() {
       </Drawer>
       <Box component="main" sx={{flexGrow: 2}}>
       <DrawerHeader />
-
         <Router>
           <Switch>
           <Route exact path="/" component={CustomerList} />

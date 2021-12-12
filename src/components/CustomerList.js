@@ -32,7 +32,7 @@ const columnActions = params => {
         <button data-action="del" class="bi btn-danger bi-trash btn btn-sm"></button>
         <button data-action="edit" class="btn btn-sm btn-info bi bi-pencil-square square"></button>
         `
-     }
+    }
     return creRow;
 }
 
@@ -108,6 +108,7 @@ function CustomerList() {
           force: true
         });
       }
+    
     const editStops = params =>  {
         params.api.refreshCells({
           columns: ["actions"],
@@ -213,11 +214,11 @@ function CustomerList() {
     ]
 
     return(
-            <div className="ag-theme-balham-dark fullheight">
+            <div className="ag-theme-balham-dark">
                 
                 <AddCustomer addCustomer={addCustomer} />
                 <Button color="warning" size="small" variant="contained" onClick={() => exportCustomers()}>Export csv</Button>
-
+        
                 <AgGridReact
                     rowData={customers}
                     onRowEditingStopped={editStops}
@@ -230,6 +231,7 @@ function CustomerList() {
                     pagination={true}
                     paginationPageSize={12}
                     editType="fullRow"
+                    domLayout="autoHeight"
                 />
                 
                 <Snackbar
@@ -242,7 +244,6 @@ function CustomerList() {
                 </Snackbar>
             </div>
     )
-
 }
 
 export default CustomerList;
